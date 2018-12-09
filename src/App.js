@@ -1,3 +1,9 @@
 import React from 'react';
+import {Icon} from 'antd';
 
-export default () => <div>Hello World!</div>;
+export default () => (
+  <div>
+    <Icon type="github" />
+    Hello World!
+  </div>
+);
