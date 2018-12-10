@@ -1,42 +1,24 @@
 import React from 'react';
-import {ApolloProvider, Query} from 'react-apollo';
-import gql from 'graphql-tag';
+import {ApolloProvider} from 'react-apollo';
+import {BrowserRouter, Route} from 'react-router-dom';
 import ApolloClient from './components/ApolloClient';
+import AppLayout from './components/AppLayout';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import ProtectedRoute from './components/ProtectedRoute';
+import {HOME_PATH, LOGIN_PATH} from './paths';
 
 export default () => (
   <ApolloProvider client={ApolloClient}>
-    <Query
-      query={gql`
-        query BoardRowQuery {
-          boardRows {
-            id
-            activityDescription
-            breakawaysToAdd
-            currentPlayers {
-              id
-              player {
-                id
-                name
-                email
-                isOnline
-                playerIcon
-              }
-              numberOfBreakaways
-            }
-          }
-        }
-      `}
-    >
-      {({loading, error, data}) => {
-        if (loading) return <p>Loading...</p>;
-        if (error) return <p>Error :(</p>;
-
-        return data.boardRows.map((row, index) => (
-          <div key={index}>
-            <p>{JSON.stringify(row)}</p>
-          </div>
-        ));
-      }}
-    </Query>
+    <BrowserRouter>
+      <AppLayout>
+        <BrowserRouter>
+          <React.Fragment>
+            <Route path={LOGIN_PATH} component={Login} />
+            <ProtectedRoute path={HOME_PATH} exact component={Home} />
+          </React.Fragment>
+        </BrowserRouter>
+      </AppLayout>
+    </BrowserRouter>
   </ApolloProvider>
 );
